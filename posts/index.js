@@ -33,6 +33,19 @@ app.post('/events', (req, res) => {
   res.end();
 });
 
-app.listen(4000, () => {
+app.listen(4000, async () => {
   console.log('Listening on 4000');
+
+  try {
+    const { data: events } = await axios.get('http://localhost:4005/events');
+    events.forEach(({ type, data }) => {
+      switch (type) {
+        case 'PostCreated': {
+          const { id, title } = data;
+          posts[id] = { id, title };
+          break;
+        }
+      }
+    });
+  } catch {}
 });

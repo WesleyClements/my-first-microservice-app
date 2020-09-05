@@ -15,24 +15,30 @@ app.get('/posts', (req, res) => {
 
 app.post('/events', (req, res) => {
   const { type, data } = req.body;
+  console.log('Recieved Event', type);
   switch (type) {
-    case 'PostCreated':
-      {
-        const { id, title } = data;
-        posts[id] = {
-          id,
-          title,
-          comments: [],
-        };
-      }
+    case 'PostCreated': {
+      const { id, title } = data;
+      posts[id] = {
+        id,
+        title,
+        comments: [],
+      };
       break;
-    case 'CommentCreated':
-      {
-        const { id, content, postId } = data;
-        const post = posts[postId];
-        post.comments.push({ id, content });
-      }
+    }
+    case 'CommentCreated': {
+      const { id, postId, content, status } = data;
+      const post = posts[postId];
+      post.comments.push({ id, content, status });
       break;
+    }
+    case 'CommentUpdated': {
+      const { id, postId, content, status } = data;
+      const post = posts[postId];
+      const comment = post.comments.find((comment) => id === comment.id);
+      Object.assign(comment, { content, status });
+      break;
+    }
   }
   console.log(posts);
   res.end();

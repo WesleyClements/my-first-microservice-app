@@ -22,7 +22,7 @@ app.post('/posts', async (req, res) => {
     title,
   };
 
-  await axios.post('http://localhost:4005/events', { type: 'PostCreated', data: posts[id] });
+  await axios.post('http://event-bus-srv:4005/events', { type: 'PostCreated', data: posts[id] });
 
   res.status(201).send(posts[id]);
 });
@@ -37,7 +37,7 @@ app.listen(4000, async () => {
   console.log('Listening on 4000');
 
   try {
-    const { data: events } = await axios.get('http://localhost:4005/events');
+    const { data: events } = await axios.get('http://event-bus-srv:4005/events');
     events.forEach(({ type, data }) => {
       switch (type) {
         case 'PostCreated': {

@@ -17,8 +17,22 @@ spec:
           image: wesleyclements/posts
           resources:
             requests:
-              memory: '64Mi'
-              cpu: '250m'
+              memory: "64Mi"
+              cpu: "250m"
             limits:
-              memory: '128Mi'
-              cpu: '500m'
+              memory: "128Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: posts
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4000
+      targetPort: 4000

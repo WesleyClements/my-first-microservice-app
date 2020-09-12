@@ -16,7 +16,7 @@ app.post('/events', (req, res) => {
 
       return res.end(
         async () =>
-          await axios.post('http://localhost:4005/events', {
+          await axios.post('http://event-bus-srv:4005/events', {
             type: 'CommentModerated',
             data: { id, content, status, postId },
           })
@@ -29,7 +29,7 @@ app.post('/events', (req, res) => {
 app.listen(4003, async () => {
   console.log('Listening on 4003');
   try {
-    const { data: events } = await axios.get('http://localhost:4005/events');
+    const { data: events } = await axios.get('http://event-bus-srv:4005/events');
     const commentsToModerate = {};
     events.forEach(async ({ type, data }) => {
       switch (type) {
@@ -48,7 +48,7 @@ app.listen(4003, async () => {
     Object.values(commentsToModerate).forEach(async (comment) => {
       const { id, content, postId } = comment;
       const status = !/orange/i.test(content) ? 'approved' : 'rejected';
-      await axios.post('http://localhost:4005/events', {
+      await axios.post('http://event-bus-srv:4005/events', {
         type: 'CommentModerated',
         data: { id, content, status, postId },
       });

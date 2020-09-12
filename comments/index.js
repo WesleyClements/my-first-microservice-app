@@ -24,7 +24,7 @@ app.post('/posts/:id/comments', async (req, res) => {
 
   commentByPostId[req.params.id] = comments;
 
-  await axios.post('http://localhost:4005/events', {
+  await axios.post('http://event-bus-srv:4005/events', {
     type: 'CommentCreated',
     data: {
       id,
@@ -49,7 +49,7 @@ app.post('/events', (req, res) => {
       comment.status = status;
       return res.end(
         async () =>
-          await axios.post('http://localhost:4005/events', { type: 'CommentUpdated', data: { ...comment, postId } })
+          await axios.post('http://event-bus-srv:4005/events', { type: 'CommentUpdated', data: { ...comment, postId } })
       );
     }
   }
@@ -60,7 +60,7 @@ app.listen(4001, async () => {
   console.log('Listening on 4001');
 
   try {
-    const { data: events } = await axios.get('http://localhost:4005/events');
+    const { data: events } = await axios.get('http://event-bus-srv:4005/events');
     events.forEach(async ({ type, data }) => {
       switch (type) {
         case 'CommentCreated': {
@@ -75,7 +75,10 @@ app.listen(4001, async () => {
           const comments = commentByPostId[postId];
           const comment = comments.find((comment) => id === comment.id);
           comment.status = status;
-          await axios.post('http://localhost:4005/events', { type: 'CommentUpdated', data: { ...comment, postId } });
+          await axios.post('http://event-bus-srv:4005/events', {
+            type: 'CommentUpdated',
+            data: { ...comment, postId },
+          });
           break;
         }
       }

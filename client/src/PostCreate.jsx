@@ -7,7 +7,7 @@ export default () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://post.com/posts/create', { title });
+      await axios.post('/posts/create', { title });
       setTitle('');
     } catch (err) {
       console.error(err);

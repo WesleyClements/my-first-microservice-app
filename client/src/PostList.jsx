@@ -9,7 +9,7 @@ export default () => {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get('http://post.com/posts');
+      const res = await axios.get('/posts');
       setPosts(res.data);
     } catch (err) {
       console.error(err);

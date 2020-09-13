@@ -8,8 +8,12 @@ export default () => {
   const [posts, setPosts] = useState({});
 
   const fetchPosts = async () => {
-    const res = await axios.get('http://post.com/posts');
-    setPosts(res.data);
+    try {
+      const res = await axios.get('http://post.com/posts');
+      setPosts(res.data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {

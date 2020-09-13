@@ -34,7 +34,7 @@ app.listen(4003, async () => {
     events.forEach(async ({ type, data }) => {
       switch (type) {
         case 'CommentCreated': {
-          const { id, content, postId } = data;
+          const { id } = data;
           commentsToModerate[id] = data;
           break;
         }
